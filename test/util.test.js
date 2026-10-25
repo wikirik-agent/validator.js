@@ -76,6 +76,14 @@ describe('assertString', () => {
     assert.throws(() => { assertString(Object.create(null)); }, TypeError);
   });
 
+  it('Should throw an error for an object with an anonymous constructor', () => {
+    // Returned from a function so that nothing gives the constructor a name.
+    const makeConstructor = () => function () {};
+    const Anonymous = makeConstructor();
+    assert.strictEqual(Anonymous.name, '');
+    assert.throws(() => { assertString(new Anonymous()); }, /^TypeError: Expected a string but received a $/);
+  });
+
   // IE 11 has no Function#name, so constructor names come from their source.
   it('Should work on engines without Function#name', function () {
     const owners = [Function.prototype, String, Number];
