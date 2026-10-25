@@ -159,3 +159,69 @@ jobs:
           name: build-artifacts
       - name: Check the packed package
         run: node scripts/check-package.mjs
+
+  # Runs the Mocha suite on Deno's Node.js compatibility layer, then imports
+  # the packed package (CommonJS, ESM, deep es/ paths) from a node_modules
+  # install with Deno. Tracks the latest Deno 2.x release.
+  deno:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    name: Run tests on Deno 2.x
+    steps:
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Setup Deno 2.x
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: Run tests
+        run: deno run -A node_modules/mocha/bin/_mocha --require @babel/register --reporter dot --recursive
+      - name: Check the packed package
+        run: node scripts/check-package.mjs --runtime=deno
+
+  # Same for Bun: the Mocha suite (Mocha itself, since `bun test` does not
+  # support Mocha's `this.timeout()`/`this.skip()`), then the packed package
+  # installed with `bun install`. Tracks the latest Bun 1.x release.
+  bun:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    name: Run tests on Bun 1.x
+    steps:
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Setup Bun 1.x
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.x
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: Run tests
+        run: bun node_modules/mocha/bin/_mocha --require @babel/register --reporter dot --recursive
+      - name: Check the packed package
+        run: node scripts/check-package.mjs --runtime=bun
