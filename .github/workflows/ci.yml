@@ -97,3 +97,35 @@ jobs:
       run: |
         node --version
         node test-es5/run.js
+
+  browser:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Run tests in Chromium, Firefox and WebKit
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      # Pinned; installed with --no-save because Playwright needs a newer
+      # Node.js than the development dependencies support.
+      PLAYWRIGHT_VERSION: 1.63.0
+      REQUIREJS_VERSION: 2.3.8
+    steps:
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+      - name: Install dependencies, Playwright and RequireJS
+        run: npm install --legacy-peer-deps --no-save "playwright@$PLAYWRIGHT_VERSION" "requirejs@$REQUIREJS_VERSION"
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Run tests in browsers
+        run: npm run test:browser

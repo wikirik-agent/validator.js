@@ -71,6 +71,7 @@
     "pretest": "npm run build && npm run lint",
     "test": "npm run test:ci",
     "test:es5": "node scripts/build-es5-tests.js && node test-es5/run.js",
+    "test:browser": "node test/browser/run.mjs",
     "test:ci": "nyc --reporter=cobertura --reporter=text-summary mocha --require @babel/register --reporter dot --recursive"
   },
   "engines": {
