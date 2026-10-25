@@ -10,11 +10,11 @@ jobs:
     name: Build on Node.js 24
     steps:
       - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install dependencies
         run: npm install
       - name: Build
@@ -24,7 +24,7 @@ jobs:
       - name: Compile ES5 test suite
         run: node scripts/build-es5-tests.js
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifacts
           path: |
@@ -45,13 +45,13 @@ jobs:
     name: Run tests on Node.js ${{ matrix.node-version }}
     steps:
     - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Download build artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build-artifacts
     - name: Install dependencies
@@ -60,7 +60,7 @@ jobs:
       run: npm run test:ci
     - if: matrix.node-version == 24
       name: Send coverage info to Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -77,9 +77,9 @@ jobs:
     name: Run ES5 test suite on Node.js ${{ matrix.node-version }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Download build artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build-artifacts
     # actions/setup-node's version manifest starts at 6.17.1, so install with
@@ -112,15 +112,15 @@ jobs:
       REQUIREJS_VERSION: 2.3.8
     steps:
       - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-artifacts
       - name: Install dependencies, Playwright and RequireJS
@@ -146,15 +146,15 @@ jobs:
     name: Check the package on Node.js ${{ matrix.node-version }}
     steps:
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-artifacts
       - name: Check the packed package
@@ -171,7 +171,7 @@ jobs:
     name: Run tests on Deno 2.x
     steps:
       - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Setup Deno 2.x
@@ -179,11 +179,11 @@ jobs:
         with:
           deno-version: v2.x
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-artifacts
       - name: Install dependencies
@@ -204,7 +204,7 @@ jobs:
     name: Run tests on Bun 1.x
     steps:
       - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Setup Bun 1.x
@@ -212,11 +212,11 @@ jobs:
         with:
           bun-version: 1.x
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-artifacts
       - name: Install dependencies
@@ -237,11 +237,11 @@ jobs:
     name: Check JSR publishing (dry run)
     steps:
       - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Publish to JSR (dry run)
