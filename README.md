@@ -17,6 +17,8 @@ A library of string validators and sanitizers.
 If you're not sure if your input is a string, coerce it using `input + ''`.
 Passing anything other than a string will result in an error.
 
+Exceptions: `toString` accepts any input, and `isDate` also accepts `Date` objects. For other input that is not a string, `isDate` and `isTime` currently return `false` instead of throwing an error. A future major version will change them to throw, like the other validators.
+
 ## Installation and Usage
 
 ### Server-side usage

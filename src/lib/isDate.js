@@ -31,6 +31,9 @@ function find(array, predicate) {
 }
 
 export default function isDate(input, options) {
+  // TODO(next major): throw on input that is neither a string nor a Date, like the other
+  // validators (assertString). Returning false is the current, documented behaviour
+  // (README, "Strings only").
   if (typeof options === 'string') { // Allow backward compatibility for old format isDate(input [, format])
     options = merge({ format: options }, default_date_options);
   } else {
