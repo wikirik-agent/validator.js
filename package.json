@@ -55,8 +55,8 @@
     "uglify-js": "^3.0.19"
   },
   "scripts": {
-    "lint": "eslint src test",
-    "lint:fix": "eslint --fix src test",
+    "lint": "eslint --ext .js,.mjs,.cjs src test scripts build-browser.mjs",
+    "lint:fix": "eslint --fix --ext .js,.mjs,.cjs src test scripts build-browser.mjs",
     "check:es5": "eslint --no-eslintrc --no-ignore --parser-options=ecmaVersion:5 index.js lib validator.js validator.min.js",
     "clean:node": "rimraf index.js lib",
     "clean:es": "rimraf es",
