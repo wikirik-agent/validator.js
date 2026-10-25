@@ -61,7 +61,7 @@
     "clean:es": "rimraf es",
     "clean:browser": "rimraf validator*.js",
     "clean": "run-p clean:*",
-    "minify": "uglifyjs validator.js -o validator.min.js  --compress --mangle --comments /Copyright/",
+    "minify": "uglifyjs validator.js -o validator.min.js --no-module --compress --mangle --comments /Copyright/",
     "build:browser": "node build-browser.mjs && npm run minify",
     "build:es": "babel src -d es --env-name=es",
     "build:node": "babel src -d .",
