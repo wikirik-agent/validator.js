@@ -8,6 +8,7 @@ import assertString from '../src/lib/util/assertString';
 import startsWith from '../src/lib/util/startsWith';
 import endsWith from '../src/lib/util/endsWith';
 import lookupSet from '../src/lib/util/lookupSet';
+import validator from '../src/index';
 
 
 describe('Util', () => {
@@ -63,6 +64,37 @@ describe('assertString', () => {
 
   it('Should not throw an error if the argument is a String', () => {
     assert.doesNotThrow(() => { assertString('antidisestablishmentarianism'); });
+  });
+
+  it('Should not throw an error if the argument is a String object', () => {
+    assert.doesNotThrow(() => { assertString(new String('abc')); }); // eslint-disable-line no-new-wrappers
+  });
+
+  it('Should name the received type in the error message', () => {
+    assert.throws(() => { assertString(2024); }, /^TypeError: Expected a string but received a Number$/);
+    assert.throws(() => { assertString(null); }, /^TypeError: Expected a string but received a null$/);
+    assert.throws(() => { assertString(Object.create(null)); }, TypeError);
+  });
+
+  // IE 11 has no Function#name, so constructor names come from their source.
+  it('Should work on engines without Function#name', function () {
+    const owners = [Function.prototype, String, Number];
+    const descriptors = owners.map(owner => Object.getOwnPropertyDescriptor(owner, 'name'));
+    if (descriptors.some(descriptor => !descriptor || !descriptor.configurable)) {
+      this.skip(); // Function#name cannot be removed on this engine
+      return;
+    }
+    try {
+      owners.forEach((owner) => { delete owner.name; });
+      assert.strictEqual(String.name, undefined);
+      assert.doesNotThrow(() => { assertString('abc'); });
+      assert.throws(() => { assertString(2024); }, /^TypeError: Expected a string but received a Number$/);
+      assert.strictEqual(validator.isEmail('foo@bar.com'), true);
+      assert.strictEqual(validator.isInt('12'), true);
+      assert.throws(() => { validator.isEmail(12); }, /received a Number/);
+    } finally {
+      owners.forEach((owner, i) => { Object.defineProperty(owner, 'name', descriptors[i]); });
+    }
   });
 });
 
