@@ -57,9 +57,15 @@ import isEmail from 'validator/lib/isEmail';
 
 #### Tree-shakeable ES imports
 
+The `es` directory contains the library as ES modules. With the `.js` extension, these imports work in bundlers as well as in native ES modules in Node.js 12.17+, Deno, and browsers (using an import map for the bare `validator/...` specifier):
+
 ```javascript
-import isEmail from 'validator/es/lib/isEmail';
+import isEmail from 'validator/es/lib/isEmail.js';
+import isMobilePhone, { locales } from 'validator/es/lib/isMobilePhone.js';
+import validator from 'validator/es/index.js';
 ```
+
+In native ES modules, use `validator/es/lib/*.js` rather than `validator/lib/*.js`: CommonJS modules that also export `locales` (such as `isAlpha` and `isMobilePhone`) are imported as an object `{ default, locales }` instead of the function.
 
 ### Client-side usage
 
