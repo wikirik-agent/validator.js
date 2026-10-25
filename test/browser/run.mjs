@@ -56,6 +56,7 @@ const EXCLUDED_FILES = {
     'branch of the UMD wrapper); here both bundles run the whole suite through <script> instead',
   'esModules.test.js': 'inspects es/ with fs and loads it in Node.js; es-modules.html loads es/ in browsers',
   'testFunctions.js': 'helper imported by the test files, not a test file',
+  'readme.test.js': 'reads README.md and the source with fs; it checks repository metadata, not the runtime',
   'util.test.js': 'tests internal helpers (src/lib/util/*) that the browser bundle does not expose',
 };
 

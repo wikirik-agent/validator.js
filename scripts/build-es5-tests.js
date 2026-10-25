@@ -34,6 +34,7 @@ const vendored = {
 // Test files that cannot apply to ES5 runtimes, relative to test/, with the reason.
 const EXCLUDED = {
   'esModules.test.js': 'covers native ES modules only and parses es/ with @babel/core',
+  'readme.test.js': 'checks repository metadata, which does not depend on the runtime',
 };
 
 function listFiles(dir) {
