@@ -88,7 +88,7 @@
           skipped[test.title] = true;
           pending += 1;
           print('  skipped: ' + test.title + ' (' + skip[test.title] + ')');
-        } else if (!grep || grep.test(test.title)) {
+        } else if (!grep || test.title.indexOf(grep) !== -1) {
           context = {
             skip: function () { throw SKIP; },
             timeout: function () {},

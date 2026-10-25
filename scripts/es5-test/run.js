@@ -3,7 +3,7 @@
  * scripts/build-es5-tests.js (copied to test-es5/run.js). It needs no
  * npm install and runs on every Node.js version from 0.10 onwards:
  *
- *   node test-es5/run.js [grep-pattern]
+ *   node test-es5/run.js [title-substring]
  *
  * The compiled tests load the built CommonJS (index.js, lib/) and browser
  * (validator.js, validator.min.js) outputs, never src/.
@@ -61,7 +61,7 @@ if (/^v0\.10\./.test(process.version)) {
 }
 
 var result = runner.run({
-  grep: process.argv[2] ? new RegExp(process.argv[2]) : null,
+  grep: process.argv[2] || null, // only run tests whose full title contains this text
   skip: skip,
 });
 if (result.failed || result.passed === 0) {
