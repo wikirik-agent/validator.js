@@ -43,6 +43,12 @@ validator.isEmail('foo@bar.com'); //=> true
 import validator from 'validator';
 ```
 
+Named imports are also supported, including from native ES modules in Node.js 12.20+ / 14.13+:
+
+```javascript
+import { isEmail } from 'validator';
+```
+
 Or, import only a subset of the library:
 
 ```javascript
