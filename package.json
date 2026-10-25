@@ -61,6 +61,7 @@
     "clean:node": "rimraf index.js lib",
     "clean:es": "rimraf es",
     "clean:browser": "rimraf validator*.js",
+    "clean:test-es5": "rimraf test-es5",
     "clean": "run-p clean:*",
     "minify": "uglifyjs validator.js -o validator.min.js --no-module --compress --mangle --comments /Copyright/",
     "build:browser": "node build-browser.mjs && npm run minify",
@@ -69,6 +70,7 @@
     "build": "run-p build:* && npm run check:es5",
     "pretest": "npm run build && npm run lint",
     "test": "npm run test:ci",
+    "test:es5": "node scripts/build-es5-tests.js && node test-es5/run.js",
     "test:ci": "nyc --reporter=cobertura --reporter=text-summary mocha --require @babel/register --reporter dot --recursive"
   },
   "engines": {

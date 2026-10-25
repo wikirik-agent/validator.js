@@ -21,6 +21,8 @@ jobs:
         run: npm run build
       - name: Lint
         run: npm run lint
+      - name: Compile ES5 test suite
+        run: node scripts/build-es5-tests.js
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -31,6 +33,7 @@ jobs:
             es/
             validator.js
             validator.min.js
+            test-es5/
           retention-days: 1
 
   test:
@@ -60,3 +63,37 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+
+  # Mocha, nyc and npm install do not work on these Node.js versions, so the
+  # suite compiled to ES5 by the build job runs with its own dependency-free
+  # runner, against the built index.js, lib/ and validator(.min).js.
+  test-es5:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['0.10', '0.12', '4', '6']
+    name: Run ES5 test suite on Node.js ${{ matrix.node-version }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+    # actions/setup-node's version manifest starts at 6.17.1, so install with
+    # nvm like ljharb/actions does; it downloads and checksums nodejs.org builds.
+    - name: Install Node.js ${{ matrix.node-version }} with nvm
+      env:
+        NODE_VERSION: ${{ matrix.node-version }}
+      run: |
+        export NVM_DIR="$RUNNER_TEMP/nvm"
+        git -c advice.detachedHead=false clone --quiet --depth 1 --branch v0.40.3 https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+        . "$NVM_DIR/nvm.sh"
+        nvm install "$NODE_VERSION"
+        echo "$NVM_BIN" >> "$GITHUB_PATH"
+    - name: Run ES5 test suite
+      run: |
+        node --version
+        node test-es5/run.js
