@@ -35,6 +35,7 @@ const vendored = {
 const EXCLUDED = {
   'esModules.test.js': 'covers native ES modules only and parses es/ with @babel/core',
   'readme.test.js': 'checks repository metadata, which does not depend on the runtime',
+  'version.test.js': 'checks repository metadata, which does not depend on the runtime',
 };
 
 function listFiles(dir) {

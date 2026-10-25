@@ -225,3 +225,24 @@ jobs:
         run: bun node_modules/mocha/bin/_mocha --require @babel/register --reporter dot --recursive
       - name: Check the packed package
         run: node scripts/check-package.mjs --runtime=bun
+
+  # Keeps jsr.json publishable to JSR (dry run only; nothing is published).
+  # jsr@0.14.3 downloads and verifies a pinned Deno (v2.6.7) to run
+  # `deno publish`. The `unsupported-javascript-entrypoint` warning is expected
+  # until the package ships type declarations.
+  jsr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    name: Check JSR publishing (dry run)
+    steps:
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Publish to JSR (dry run)
+        run: npx --yes jsr@0.14.3 publish --dry-run --allow-dirty

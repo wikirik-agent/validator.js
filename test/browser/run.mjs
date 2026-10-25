@@ -58,6 +58,7 @@ const EXCLUDED_FILES = {
   'testFunctions.js': 'helper imported by the test files, not a test file',
   'readme.test.js': 'reads README.md and the source with fs; it checks repository metadata, not the runtime',
   'util.test.js': 'tests internal helpers (src/lib/util/*) that the browser bundle does not expose',
+  'version.test.js': 'reads package.json, jsr.json and the source with fs; it checks repository metadata',
 };
 
 // Tests (by full title) in the bundled files that are not run in browsers.
